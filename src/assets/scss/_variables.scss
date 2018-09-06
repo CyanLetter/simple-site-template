@@ -1,0 +1,46 @@
+/* 
+==============================================
+CONTENT:	Variables and Mixins
+AUTHOR:		Dakota Ling
+==============================================
+*/
+
+$bp-xlarge: 1440px;
+$bp-large: 1080px;
+$bp-med: 768px;
+$bp-small: 480px;
+
+$primary-ui: rgb(38, 153, 251);
+$secondary-ui: rgb(188, 224, 253);
+$background-color: #ffffff;
+$text-color: #000000;
+
+@mixin breakpoint($point) {
+	// breakpoint now applies to any styles when viewport is greater than this width
+	@media only screen and (min-width: $point) { @content; }
+}
+
+@mixin clearfix {
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+@mixin aspect-ratio($width, $height) {
+	position: relative;
+	&:before {
+		display: block;
+		content: "";
+		width: 100%;
+		padding-top: ($height / $width) * 100%;
+	}
+	> .content {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+}
