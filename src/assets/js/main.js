@@ -1,11 +1,23 @@
-var DL = DL || {};
+import { Example } from './site/ExampleClass.js';
 
-DL.init = function() {
+class Main {
+	constructor() {
+		console.log("Starting App");
+		window.app = this;
+
+		this.init();
+	}
+
+	init() {
+		new Example();
+	}
+}
+
+window.onload = function() {
+	new Main();
+}
+
+// Reserved for quit events
+window.onbeforeunload = function() {
 	
-};
-
-(function(){
-
-	DL.init();
-	
-})();
+}

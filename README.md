@@ -1,4 +1,4 @@
-# Website Starter Template
+# Base Website Template
 
 ## Table of Contents
 
@@ -8,9 +8,9 @@
 <a name="overview"></a>
 ## Overview
 
-This is a simple website template for getting projects up and running quickly. It was designed to compile quilckly, to maintain separation between src and dist assets, and to be able to run from both src and dist. 
+This is a simple website template for getting projects up and running quickly. Designed primarily to provide a base build process that maintains separation between src and dist assets. 
 
-This template includes sass compilation, js concatination and minification, and simple image compression. It does not include things like ES6 transpiling. 
+This project includes sass and js compilation, and manifest revisions for compiled files. React or Vue based projects should instead be set up via their respective project templates and CLI interfaces.
 
 <a name="gettingstarted"></a>
 ## Getting Started
@@ -24,13 +24,21 @@ cd path/to/project/folder
 npm install
 ```
 
-**Run Development Build**
+**Run Watch**
 
 ```
 gulp
 ```
 
-A development build will compile sass files, run a local web server out of the `src` folder, and watch for file changes.
+The default task will make a development build, run a local web server out of the `dist` folder, and watch for file changes. It will compile, but not minify, css and js assets.
+
+**Run Development Build**
+
+```
+gulp build-dev
+```
+
+A development build will make a build that compiles, but does not minify, css and js assets.
 
 **Make Production Build**
 
