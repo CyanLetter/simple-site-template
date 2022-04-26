@@ -10,6 +10,7 @@ const del = require('del');
 const revRewrite = require('gulp-rev-rewrite');
 const webpack = require('webpack-stream');
 const browserSync = require('browser-sync');
+const fileinclude = require('gulp-file-include');
 
 // Development Tasks 
 // -----------------
@@ -90,9 +91,11 @@ gulp.task('watch', function() {
       'copy-css', 
       'manifest',
       'html', // copy html so we have original filenames before rewriting
-      'rewrite'
+      'rewrite',
+      function() {
+        browserSync.reload();
+      }
     );
-    browserSync.reload();
   });
   gulp.watch(['js/**/*.js', '!js/lib/**/*'], {cwd: 'src/assets'}, function() {
     runSequence(
@@ -100,48 +103,75 @@ gulp.task('watch', function() {
       'clean:js',
       'transpile',
       'copy-js', 
+      'libs',
       'manifest',
       'html', // copy html so we have original filenames before rewriting
-      'rewrite'
+      'rewrite',
+      function() {
+        browserSync.reload();
+      }
     );
-    browserSync.reload();
   });
-  gulp.watch('src/*.html', browserSync.reload);
+  
+  gulp.watch(['src/*.html', 'src/views/*.html'], function() {
+    runSequence(
+      'html',
+      'rewrite',
+      function() {
+        browserSync.reload();
+      }
+    );
+  });
 
   // watch for asset changes and copy over new files if necessary
   gulp.watch('images/**/*', {cwd: 'src/assets'}, function() {
     runSequence(
-      'images'
+      'images',
+      function() {
+        browserSync.reload();
+      }
     );
-    browserSync.reload();
+    
   });
 
   gulp.watch('fonts/**/*', {cwd: 'src/assets'}, function() {
     runSequence(
-      'fonts'
+      'fonts',
+      function() {
+        browserSync.reload();
+      }
     );
-    browserSync.reload();
+    
   });
 
   gulp.watch('data/**/*', {cwd: 'src/assets'}, function() {
     runSequence(
-      'data'
+      'data',
+      function() {
+        browserSync.reload();
+      }
     );
-    browserSync.reload();
+    
   });
 
   gulp.watch('videos/**/*', {cwd: 'src/assets'}, function() {
     runSequence(
-      'videos'
+      'videos',
+      function() {
+        browserSync.reload();
+      }
     );
-    browserSync.reload();
+    
   });
 
   gulp.watch('lib/**/*', {cwd: 'src/assets/js'}, function() {
     runSequence(
-      'libs'
+      'libs',
+      function() {
+        browserSync.reload();
+      }
     );
-    browserSync.reload();
+    
   });
 });
 
@@ -185,6 +215,10 @@ gulp.task('rewrite', function() {
 // Copying HTML 
 gulp.task('html', function() {
   return gulp.src('src/*.html')
+    .pipe(fileinclude({
+      prefix: '@@',
+      basepath: '@file'
+    }))
     .pipe(gulp.dest('dist'))
 });
 
@@ -224,6 +258,12 @@ gulp.task('videos', function() {
     .pipe(gulp.dest('dist/assets/videos'))
 })
 
+// Copying sounds
+gulp.task('audio', function() {
+  return gulp.src('src/assets/audio/**/*')
+    .pipe(gulp.dest('dist/assets/audio'))
+})
+
 // Copying javascript libraries 
 gulp.task('libs', function() {
   return gulp.src('src/assets/js/lib/**/*')
@@ -247,7 +287,7 @@ gulp.task('build-dev', function(callback) {
     'transpile',
     'copy-css', 
     'copy-js',
-    ['html', 'libs', 'images', 'fonts', 'data', 'videos'],
+    ['html', 'libs', 'images', 'fonts', 'data', 'videos', 'audio'],
     'manifest',
     'rewrite',
     callback
@@ -262,7 +302,7 @@ gulp.task('build', function(callback) {
     'transpile',
     'minify-css', 
     'minify-js',
-    ['html', 'libs', 'images', 'fonts', 'data', 'videos'],
+    ['html', 'libs', 'images', 'fonts', 'data', 'videos', 'audio'],
     'manifest',
     'rewrite',
     callback

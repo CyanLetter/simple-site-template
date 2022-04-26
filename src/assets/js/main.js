@@ -1,5 +1,7 @@
 import { Example } from './site/ExampleClass.js';
 
+import signal from 'signal-js';
+
 class Main {
 	constructor() {
 		console.log("Starting App");
@@ -9,7 +11,14 @@ class Main {
 	}
 
 	init() {
+		// example sinal handling event
+		signal.on('boot', (e) => this.onBoot(e));
+
 		new Example();
+	}
+
+	onBoot(e) {
+		console.log("booted", e);
 	}
 }
 

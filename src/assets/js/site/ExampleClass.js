@@ -1,6 +1,7 @@
 /***************************************
 	Example Class
 ***************************************/
+import signal from 'signal-js';
 
 export class Example {
 
@@ -13,5 +14,8 @@ export class Example {
 
 	init() {
 		console.log(this.name, "initialized");
+
+		// emit signal to be picked up in main.js
+		signal.emit('boot', "Example Class");
 	}
 }
